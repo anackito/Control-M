@@ -1,0 +1,50 @@
+#!/usr/bin/python
+
+import sys
+import suds
+import requests
+import json
+import argparse
+import pprint
+from collections import namedtuple
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from datetime import datetime
+
+headers = {
+
+    'Content-Type': 'application/json',
+
+}
+data = '{"username":"APItest","password":"APItest"}'
+
+
+response = requests.post('https://MY_CONTROL_MSERVER_/automation-api/session/login', headers=headers, data=data ,verify=False)
+
+response_json = response.json()
+pprint.pprint(response_json)
+print(response_json['token'])
+T = (response_json['token'])
+
+headers = {
+
+    'Authorization': 'Bearer ' + T,
+}
+
+response = requests.get('https://MY_CONTROL_MSERVER_/folderX/THE_NAME_OF_MY_JOB', headers=headers ,verify=False)
+
+
+print(response.text)
+
+f = open('response.text', 'w')
+
+sys.stdout = open(response.text + 'w')
+
+save_path = 'S:\nPath_to_save_my_job\nJobsfolder' #(on my windows computer)
+
+name_of_file = raw_input("What is the name of your job: ")
+
+completeName = os.path.join(save_path, name_of_file+".xml")         
+
+completeName.write(toFile)
+
+completeName.close()
